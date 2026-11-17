@@ -1,0 +1,85 @@
+index
+
+index 
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Movies</title>
+</head>
+<body>
+  <h1>Movies</h1>
+
+  <p>Database: <strong id="status">...</strong></p>
+  <p>Container: <strong id="container">...</strong></p>
+
+  <h2>Movie list</h2>
+  <table border="1">
+    <thead>
+      <tr><th>Title</th><th>Year</th><th>Genre</th></tr>
+    </thead>
+    <tbody id="list">
+      <tr><td colspan="3">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Add a movie</h2>
+  <form id="form">
+    <label>Title: <input name="title" required></label><br>
+    <label>Release year: <input name="release_date" type="number" min="1800" max="2100" required></label><br>
+    <label>Genre: <input name="genre" required></label><br>
+    <button type="submit">Add</button>
+  </form>
+  <p id="message"></p>
+
+  <script>
+    async function refresh() {
+      const health = await fetch("/api/sante").then((r) => r.json());
+      document.getElementById("status").textContent = health.base;
+      document.getElementById("container").textContent = health.conteneur;
+
+      const list = document.getElementById("list");
+      const response = await fetch("/api/films");
+      if (!response.ok) {
+        list.innerHTML = '<tr><td colspan="3">No database: nothing to display.</td></tr>';
+        return;
+      }
+      const films = await response.json();
+      list.innerHTML = "";
+      for (const f of films) {
+        const row = document.createElement("tr");
+        for (const value of [f.title, f.release_date, f.genre]) {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+        }
+        list.appendChild(row);
+      }
+    }
+
+    document.getElementById("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      data.release_date = Number(data.release_date);
+      const response = await fetch("/api/film", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const message = document.getElementById("message");
+      if (response.ok) {
+        message.textContent = "";
+        e.target.reset();
+      } else {
+        const error = await response.json();
+        message.textContent = "Could not save: " + error.erreur;
+      }
+      refresh();
+    });
+
+    refresh();
+    setInterval(refresh, 3000);
+  </script>
+</body>
+</html>
