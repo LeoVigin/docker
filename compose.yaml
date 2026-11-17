@@ -1,0 +1,36 @@
+services:
+
+  adminer:
+    image: dpage/pgadmin4:7.7
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - db
+
+  api:
+    build: /app
+    ports:
+      - "3000:3000"
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD} 
+      PGDATABASE: ${POSTGRES_DB}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - donnes:/var/lib/postgresql
+
+volumes:
+  donnes:
