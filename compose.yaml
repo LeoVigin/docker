@@ -1,19 +1,22 @@
 services:
 
   adminer:
-    image: dpage/pgadmin4:7.7
+    image: adminer:4.8.1
     ports:
-      - "8081:80"
+      - "8080:8080"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DEFAULT_DB_DRIVER: pgsql
+      ADMINER_DEFAULT_DB_NAME: ${POSTGRES_DB}
+      ADMINER_DEFAULT_USERNAME: ${POSTGRES_USER}
+      ADMINER_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       - db
 
   api:
     build: ./app
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       PGHOST: db
       PGPORT: 5432
@@ -30,7 +33,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - donnes:/var/lib/postgresql
+      - donnes:/var/lib/postgresql/data
 
 volumes:
   donnes:
