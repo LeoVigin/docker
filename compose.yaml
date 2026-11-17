@@ -3,7 +3,7 @@ services:
   adminer:
     image: dpage/pgadmin4:7.7
     ports:
-      - "8080:80"
+      - "8081:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -11,14 +11,14 @@ services:
       - db
 
   api:
-    build: /app
+    build: ./app
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       PGHOST: db
       PGPORT: 5432
       PGUSER: ${POSTGRES_USER}
-      PGPASSWORD: ${POSTGRES_PASSWORD} 
+      PGPASSWORD: ${POSTGRES_PASSWORD}
       PGDATABASE: ${POSTGRES_DB}
     depends_on:
       - db
