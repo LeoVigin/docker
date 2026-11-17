@@ -6,7 +6,7 @@ This is a list for films using Docker
 
 - Download the folder or clone the repository using
 ```
-clone https://github.com/LeoVigin/docker-movie-list.git
+clone https://github.com/LeoVigin/docker-film-list.git
 ```
 
 - Open the project in any local development server
