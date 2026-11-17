@@ -1,12 +1,3 @@
-// ---------------------------------------------------------------------------
-// Liste de films
-//
-// Ce qu'elle fait :
-//   - elle affiche une page web (public/index.html) ;
-//   - elle se connecte à une base PostgreSQL si on lui dit où la trouver ;
-//   - elle liste et enregistre des films.
-// ---------------------------------------------------------------------------
-
 const os = require("node:os");
 const path = require("node:path");
 const express = require("express");
@@ -116,11 +107,11 @@ app.post("/api/film", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("titles : application démarrée sur le port " + PORT);
+  console.log("titles : application started on port " + PORT);
   connecterLaBase();
 });
 
 process.on("SIGTERM", () => {
-  console.log("titles : arrêt demandé, au revoir");
+  console.log("titles : closing requested, goodbye");
   process.exit(0);
 });
