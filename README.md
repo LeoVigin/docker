@@ -27,7 +27,7 @@ docker compose up -d --build
 
 - Open your localhost:3000 to access the front end and localhost:8000 to access the Adminer interface
 - To connect to Adminer, choose 'PostgreSQL' as the systeme and use the credentials you wrote in the .env (PGADMIN...)
-- When connected to the Adminer interface, click on the 'Movie' table and then on 'Show data' to access the data
+- When connected to the Adminer interface, click on the 'films' table and then on 'Select data' to access the data
 - Then use this command to stop the container
 ```
 docker compose down
